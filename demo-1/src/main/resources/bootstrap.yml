@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接。不要设置过大，如果过大，启动项目会报错：打开文件数过多
+    # 默认值为8，建议设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程
+    # 默认等于 io-threads*8，它的值设置取决于系统的负载，可适当调大该值
+    worker-threads: 128
+    # 每块buffer的空间大小，越小空间被利用越充分
+    # 不要设置太大，以免影响其他应用，合适即可
+    buffer-size: 1024
+    # 是否分配的直接内存(NIO直接分配的堆外内存)
+    # 默认false
+    direct-buffers: true
+    # HTTP POST请求最大的大小
+    # 默认0，无限制；建议10485760(10M)
+    max-http-post-size: 10485760
+    allow-unescaped-characters-in-url: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: demo-1
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 82c52fe1-1024-49d8-8aeb-0ef353552a1d
+        cluster-name: DEFAULT
+      config:
+        file-extension: yml
+        server-addr: 127.0.0.1:8848
+        namespace: 82c52fe1-1024-49d8-8aeb-0ef353552a1d
+        cluster-name: DEFAULT
+
+
+
